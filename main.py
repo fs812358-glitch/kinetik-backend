@@ -18,10 +18,14 @@ def home():
     return {"status": "Motor Dairesi 7/24 Aktif (Hafif Sürüm)", "version": "1.1"}
 
 @app.post("/process-image")
-def process_image(req: VideoRequest):
+def process_image(req_data: VideoRequest):
     try:
-        # 1. Supabase'den gelen müşteri fotoğrafını hafızaya al
-        req_url = urllib.request.urlopen(req.image_url)
+        # 1. Fotoğrafı bir web tarayıcısı gibi indir (403 engelini aşmak için)
+        req = urllib.request.Request(
+            req_data.image_url, 
+            headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+        )
+        req_url = urllib.request.urlopen(req)
         arr = np.asarray(bytearray(req_url.read()), dtype=np.uint8)
         img = cv2.imdecode(arr, -1)
         gri_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
