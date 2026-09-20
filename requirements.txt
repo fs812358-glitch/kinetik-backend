@@ -3,3 +3,4 @@ uvicorn
 mtcnn
 opencv-python-headless
 pydantic
+tensorflow-cpu
